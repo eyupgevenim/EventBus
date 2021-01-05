@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Sample.ActiveMQ.Consumer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ACTIVEMQ_TOPIC": "test-topic",
+        "ACTIVEMQ_URI": "tcp://activemq:61616",
+        "ACTIVEMQ_USERNAME": "admin",
+        "ACTIVEMQ_PASSWORD": "admin"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+.vs/
+.docker/
+/**/bin
+/**/obj
+
+/**/*.csproj.user

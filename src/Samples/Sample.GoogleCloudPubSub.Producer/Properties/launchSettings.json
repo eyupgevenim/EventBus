@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Sample.GoogleCloudPubSub.Producer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "PUBSUB_EMULATOR_HOST": "localhost:8085",
+        "PUBSUB_PROJECT_ID": "my-project",
+        "PUBSUB_TOPIC_ID": "my-topic",
+        "PUBSUB_SUBSCRIPTION_ID": "my-sub"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

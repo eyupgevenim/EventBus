@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Sample.ServiceBus.Consumer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "SERVICEBUS_CONNECTIONSTRING": "Endpoint=sb://{your_bus}.servicebus.windows.net/;SharedAccessKeyName=Root;SharedAccessKey={your_topic_policy_key};EntityPath=my_event_bus;",
+        "SERVICEBUS_SUBSCRIPTIONNAME": "my-subscription"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

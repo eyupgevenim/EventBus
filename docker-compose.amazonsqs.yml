@@ -1,0 +1,53 @@
+# docker-compose -f docker-compose.amazonsqs.yml up --build -d
+# https://hub.docker.com/r/softwaremill/elasticmq
+# docker run -p 9324:9324 softwaremill/elasticmq
+
+version: "3.4"
+
+networks:
+    app-tier:
+        driver: bridge
+
+services:
+    amazonsqs: #http://amazonsqs:9324
+        image: softwaremill/elasticmq
+        container_name: amazonsqs
+        hostname: amazonsqs
+        ports:
+            - "9324:9324"
+        networks:
+            - app-tier
+
+    sample-amazonsqs-producer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.AmazonSQS.Producer/Dockerfile
+        container_name: "Sample.AmazonSQS.Producer"
+        volumes:
+            - ./.docker/amazonsqs/Sample.AmazonSQS.Producer/Logs/:/app/Logs/
+        environment:
+            AMAZON_SQS_ENDPOINT: "http://amazonsqs:9324"
+            AMAZON_SQS_REGION: REGION
+            AMAZON_SQS_ACCESSKEYID: na
+            AMAZON_SQS_SECRET_ACCESSKEY: na
+            AMAZON_SQS_QUEUENAME: test-queue
+            AMAZON_SQS_LONG_POLL_TIME_SEC: "15"
+        networks:
+            - app-tier
+
+    sample-amazonsqs-consumer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.AmazonSQS.Consumer/Dockerfile
+        container_name: "Sample.AmazonSQS.Consumer"
+        volumes:
+            - ./.docker/amazonsqs/Sample.AmazonSQS.Consumer/Logs/:/app/Logs/
+        environment:
+            AMAZON_SQS_ENDPOINT: "http://amazonsqs:9324"
+            AMAZON_SQS_REGION: REGION
+            AMAZON_SQS_ACCESSKEYID: na
+            AMAZON_SQS_SECRET_ACCESSKEY: na
+            AMAZON_SQS_QUEUENAME: test-queue
+            AMAZON_SQS_LONG_POLL_TIME_SEC: "15"
+        networks:
+            - app-tier

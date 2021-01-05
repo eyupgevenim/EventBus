@@ -1,0 +1,47 @@
+# docker-compose -f docker-compose.activemq.yml up --build -d
+# https://hub.docker.com/r/rmohr/activemq
+
+version: "3.4"
+
+services:
+    activemq:
+        image: rmohr/activemq
+        hostname: activemq
+        container_name: activemq
+        ports:
+            - "61616:61616"
+            - "8161:8161"
+        environment:
+            ACTIVEMQ_OPTS: "-Xms2g -Xmx3g"
+        volumes:
+            - ./.docker/activemq/conf/activemq.xml:/conf/activemq.xml
+
+    sample-activemq-producer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.ActiveMQ.Producer/Dockerfile
+        container_name: Sample.ActiveMQ.Producer
+        volumes:
+            - ./.docker/activemq/Sample.ActiveMQ.Producer/Logs/:/app/Logs/
+        environment:
+            ACTIVEMQ_USERNAME: admin
+            ACTIVEMQ_PASSWORD: admin
+            ACTIVEMQ_URI: tcp://activemq:61616
+            ACTIVEMQ_TOPIC: test-topic
+        links:
+            - activemq
+
+    sample-activemq-consumer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.ActiveMQ.Consumer/Dockerfile
+        container_name: Sample.ActiveMQ.Consumer
+        volumes:
+            - ./.docker/activemq/Sample.ActiveMQ.Consumer/Logs/:/app/Logs/
+        environment:
+            ACTIVEMQ_USERNAME: admin
+            ACTIVEMQ_PASSWORD: admin
+            ACTIVEMQ_URI: tcp://activemq:61616
+            ACTIVEMQ_TOPIC: test-topic
+        links:
+            - activemq

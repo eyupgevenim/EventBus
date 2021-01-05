@@ -1,0 +1,40 @@
+# docker-compose -f docker-compose.azurestoragequeues.yml up --build -d
+# https://hub.docker.com/r/microsoft/azure-storage-emulator/
+
+version: "3.4"
+
+services:
+    azurestorage:
+        image: farmer1992/azure-storage-emulator # microsoft/azure-storage-emulator
+        hostname: azurestorage
+        container_name: azurestorage
+        ports:
+            - "10000:10000" # Blob
+            - "10001:10001" # Queue
+            - "10002:10002" # Table
+
+    sample-azurestoragequeues-producer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.AzureStorageQueues.Producer/Dockerfile
+        container_name: Sample.AzureStorageQueues.Producer
+        #volumes:
+        #    - ./.docker/azurestorage/Sample.AzureStorageQueues.Producer/Logs/:/app/Logs/
+        environment:
+            AZURE_SQ_QUEUENAME: test-queue
+            AZURE_SQ_CONNECTIONSTRING: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;QueueEndpoint=http://azurestorage:10001/devstoreaccount1;"
+        links:
+            - azurestorage
+
+    sample-azurestoragequeues-consumer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.AzureStorageQueues.Consumer/Dockerfile
+        container_name: Sample.AzureStorageQueues.Consumer
+        #volumes:
+        #    - ./.docker/azurestorage/Sample.AzureStorageQueuesAzureStorageQueues.Consumer/Logs/:/app/Logs/
+        environment:
+            AZURE_SQ_QUEUENAME: test-queue
+            AZURE_SQ_CONNECTIONSTRING: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;QueueEndpoint=http://azurestorage:10001/devstoreaccount1;"
+        links:
+            - azurestorage

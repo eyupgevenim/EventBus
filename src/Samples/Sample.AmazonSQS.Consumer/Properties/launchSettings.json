@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "Sample.AmazonSQS.Consumer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "AMAZON_SQS_ENDPOINT": "http://localhost:9324",
+        "AMAZON_SQS_REGION": "REGION",
+        "AMAZON_SQS_ACCESSKEYID": "na",
+        "AMAZON_SQS_SECRET_ACCESSKEY": "na",
+        "AMAZON_SQS_QUEUENAME": "test-queue",
+        "AMAZON_SQS_LONG_POLL_TIME_SEC": "15"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

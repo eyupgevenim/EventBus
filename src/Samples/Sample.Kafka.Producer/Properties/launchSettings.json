@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "Sample.Kafka.Producer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "KAFKA_BOOTSTRAP_SERVERS": "localhost:9092",
+        "KAFKA_TOPIC": "product-topic",
+        "KAFKA_GROUP_ID": "product-group-id",
+        "KAFKA_AUTO_COMMIT_INTERVAL_MS": "5000",
+        "KAFKA_AUTO_OFFSET_RESET": "smallest",
+
+        "KAFKA_ENABLE_AUTO_COMMIT": "false",
+        "KAFKA_STATISTICS_INTERVAL_MS": "5000",
+        "KAFKA_SESSION_TIMEOUT_MS": "6000",
+        "KAFKA_ENABLE_PARTITION_EOF": "true",
+
+        "KAFKA_SASL_USERNAME": "user",
+        "KAFKA_SASL_PASSWORD": "password",
+        "KAFKA_SASL_MECHANISM": "SaslMechanism.Plain",
+        "KAFKA_SECURITY_PROTOCOL": "SecurityProtocol.SaslSsl",
+        "KAFKA_DUBUG": "security,broker,protocol"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

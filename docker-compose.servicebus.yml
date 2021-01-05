@@ -1,0 +1,30 @@
+# docker-compose -f docker-compose.servicebus.yml up --build -d
+# https://docs.microsoft.com/en-US/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#get-the-connection-string
+
+version: "3.4"
+
+services:
+    # create service-bus https://portal.azure.com
+    #https://docs.microsoft.com/en-US/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#get-the-connection-string
+
+    sample-servicebus-producer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.ServiceBus.Producer/Dockerfile
+        container_name: Sample.ServiceBus.Producer
+        volumes:
+            - ./.docker/servicebus/Sample.ServiceBus.Producer/Logs/:/app/Logs/
+        environment:
+            SERVICEBUS_SUBSCRIPTIONNAME: my-subscription
+            SERVICEBUS_CONNECTIONSTRING: "Endpoint=sb://{your_bus}.servicebus.windows.net/;SharedAccessKeyName=Root;SharedAccessKey={your_topic_policy_key};EntityPath=my_event_bus;"
+
+    sample-servicebus-consumer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.ServiceBus.Consumer/Dockerfile
+        container_name: Sample.ServiceBus.Consumer
+        volumes:
+            - ./.docker/servicebus/Sample.ServiceBus.Consumer/Logs/:/app/Logs/
+        environment:
+            SERVICEBUS_SUBSCRIPTIONNAME: my-subscription
+            SERVICEBUS_CONNECTIONSTRING: "Endpoint=sb://{your_bus}.servicebus.windows.net/;SharedAccessKeyName=Root;SharedAccessKey={your_topic_policy_key};EntityPath=my_event_bus;"

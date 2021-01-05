@@ -1,0 +1,65 @@
+# docker-compose -f docker-compose.rabbitmq.yml up --build -d
+# https://hub.docker.com/r/bitnami/rabbitmq
+
+version: "3.4"
+
+networks:
+    app-tier:
+        driver: bridge
+
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq
+        volumes:
+            - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+            - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+            - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+        environment:
+            - RABBITMQ_ERLANG_COOKIE=s3cr3tc00ki3
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=password
+
+            #    RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERL_COOKIE}
+            # ...
+            #env_file:
+            #- .env
+        ports:
+            - 5672:5672
+            - 15672:15672
+        networks:
+            - app-tier
+
+    sample-rabbitmq-producer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.RabbitMQ.Producer/Dockerfile
+        container_name: "Sample.RabbitMQ.Producer"
+        volumes:
+            - ./.docker/rabbitmq/Sample.RabbitMQ.Producer/Logs/:/app/Logs/
+        environment:
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=password
+            - RABBITMQ_HOSTNAME=rabbitmq
+            - RABBITMQ_SUBSCRIPTION_CLIENTNAME=testqueue
+        #env_file:
+        #    - .env
+        networks:
+            - app-tier
+
+    sample-rabbitmq-consumer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.RabbitMQ.Consumer/Dockerfile
+        container_name: "Sample.RabbitMQ.Consumer"
+        volumes:
+            - ./.docker/rabbitmq/Sample.RabbitMQ.Consumer/Logs/:/app/Logs/
+        environment:
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=password
+            - RABBITMQ_HOSTNAME=rabbitmq
+            - RABBITMQ_SUBSCRIPTION_CLIENTNAME=testqueue
+        #env_file:
+        #    - .env
+        networks:
+            - app-tier

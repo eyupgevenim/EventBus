@@ -1,0 +1,52 @@
+# docker-compose -f docker-compose.ibmmq.yml up --build -d
+# https://hub.docker.com/r/ibmcom/mq/
+
+version: "3.4"
+
+services:
+    ibmmq:
+        image: ibmcom/mq
+        hostname: ibmmq
+        container_name: ibmmq
+        ports:
+            - "1414:1414" # Queue manager
+            - "9443:9443" # Web console
+        environment:
+            LICENSE: accept
+            MQ_QMGR_NAME: QM1
+
+    sample-ibmmq-producer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.IBMMQ.Producer/Dockerfile
+        container_name: Sample.IBMMQ.Producer
+        volumes:
+            - ./.docker/ibmmq/Sample.IBMMQ.Producer/Logs/:/app/Logs/
+        environment:
+            IBMMQ_USERID: app
+            IBMMQ_PASSWORD: passw0rd
+            IBMMQ_TOPIC: dev/
+            IBMMQ_HOST: ibmmq
+            IBMMQ_PORT: 1414
+            IBMMQ_CHANNEL: DEV.APP.SVRCONN
+            IBMMQ_QMGR: "*QM1TLS"
+        links:
+            - ibmmq
+
+    sample-ibmmq-consumer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.IBMMQ.Consumer/Dockerfile
+        container_name: Sample.IBMMQ.Consumer
+        volumes:
+            - ./.docker/ibmmq/Sample.IBMMQ.Consumer/Logs/:/app/Logs/
+        environment:
+            IBMMQ_USERID: app
+            IBMMQ_PASSWORD: passw0rd
+            IBMMQ_TOPIC: dev/
+            IBMMQ_HOST: ibmmq
+            IBMMQ_PORT: 1414
+            IBMMQ_CHANNEL: DEV.APP.SVRCONN
+            IBMMQ_QMGR: "*QM1TLS"
+        links:
+            - ibmmq

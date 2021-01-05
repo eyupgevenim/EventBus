@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Sample.RabbitMQ.Producer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "RABBITMQ_HOSTNAME": "localhost",
+        "RABBITMQ_DEFAULT_USER": "user",
+        "RABBITMQ_DEFAULT_PASS": "password",
+        "RABBITMQ_SUBSCRIPTION_CLIENTNAME": "test-bus"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

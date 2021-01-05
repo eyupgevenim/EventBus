@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Sample.IBMMQ.Producer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "IBMMQ_PASSWORD": "passw0rd",
+        "IBMMQ_QMGR": "*QM1TLS",
+        "IBMMQ_CHANNEL": "DEV.APP.SVRCONN",
+        "IBMMQ_TOPIC": "dev/",
+        "IBMMQ_USERID": "app",
+        "IBMMQ_PORT": "1414",
+        "IBMMQ_HOST": "localhost"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

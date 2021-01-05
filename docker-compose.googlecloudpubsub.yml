@@ -1,0 +1,56 @@
+# docker-compose -f docker-compose.googlecloudpubsub.yml up --build -d
+# https://hub.docker.com/r/singularities/pubsub-emulator
+# docker run -it --rm -p "8085:8085" -e PUBSUB_PROJECT_ID=my-project google/cloud-sdk gcloud beta emulators pubsub start --host-port=0.0.0.0:8085
+
+version: "3.4"
+
+networks:
+    app-tier:
+        driver: bridge
+
+services:
+    pubsub:
+        image: google/cloud-sdk #singularities/pubsub-emulator #google/cloud-sdk
+        container_name: pubsub
+        environment:
+            PUBSUB_PROJECT_ID: my-project
+            PUBSUB_LISTEN_ADDRESS: "0.0.0.0:8085"
+        ports:
+            - "8085:8085"
+        command: ["gcloud", "beta", "emulators", "pubsub", "start", "--host-port", "0.0.0.0:8085"]
+        networks:
+            - app-tier
+
+    sample-googlecloudpubsub-producer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.GoogleCloudPubSub.Producer/Dockerfile
+        container_name: Sample.GoogleCloudPubSub.Producer
+        volumes:
+            - ./.docker/googlecloudpubsub/Sample.GoogleCloudPubSub.Producer/Logs/:/app/Logs/
+        environment:
+            PUBSUB_PROJECT_ID: my-project
+            PUBSUB_TOPIC_ID: my-topic
+            PUBSUB_SUBSCRIPTION_ID: my-sub
+            PUBSUB_EMULATOR_HOST: "192.168.1.2:8085" # "pubsub:8085"
+        depends_on:
+            - pubsub
+        networks:
+            - app-tier
+
+    sample-googlecloudpubsub-consumer:
+        build:
+            context: .
+            dockerfile: ./src/Samples/Sample.GoogleCloudPubSub.Consumer/Dockerfile
+        container_name: Sample.GoogleCloudPubSub.Consumer
+        volumes:
+            - ./.docker/googlecloudpubsub/Sample.GoogleCloudPubSub.Consumer/Logs/:/app/Logs/
+        environment:
+            PUBSUB_PROJECT_ID: my-project
+            PUBSUB_TOPIC_ID: my-topic
+            PUBSUB_SUBSCRIPTION_ID: my-sub
+            PUBSUB_EMULATOR_HOST: "192.168.1.2:8085" # "pubsub:8085"
+        depends_on:
+            - pubsub
+        networks:
+            - app-tier
