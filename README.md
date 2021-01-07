@@ -1,7 +1,7 @@
 ALL Message Queue (MQ) with .NET Core
 =====================================
 
-All Message Queue (MQ) Software producer and consumer (<b>ActiveMQ, AmazonSQS, AzureStorageQueues, GoogleCloudPubSub, IBMMQ, Kafka, ServiceBus </b> ...) samples with .NET Core and deploy docker
+All Message Queue (MQ) Software producer and consumer (<b>ActiveMQ, AmazonSQS, AzureStorageQueues, GoogleCloudPubSub, IBMMQ, Kafka, RabbitMQ, ServiceBus </b> ...) samples with .NET Core and deploy docker
 
 
 | Event Bus | Sample Producer | Sample Consumer | deploy docker-compose |
