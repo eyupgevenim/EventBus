@@ -21,8 +21,8 @@ namespace Sample.ActiveMQ.Producer
             while (true) System.Threading.Thread.Sleep(2000);
         }
 
-        //docker run -d -p 61616:61616 -p 8161:8161 --name activemq rmohr/activemq 
-        //docker run -p 61616:61616 -p 8161:8161 rmohr/activemq
+        //docker run -d -p 61616:61616 -p 8161:8161 --name activemq rmohr/activemq      //tcp://activemq:61616
+        //docker run -p 61616:61616 -p 8161:8161 rmohr/activemq                         //tcp://localhost:61616
         static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IActiveMQPersistentConnection>(sp =>
