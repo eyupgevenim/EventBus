@@ -294,7 +294,7 @@ namespace EventBus.AmazonSQS
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex);
+                throw ex;
             }
         }
     }
